@@ -604,17 +604,4 @@ body.hide-header .header {
 
  
  
-/* fireworksssss */
  
-
-
- /* Fireworks Canvas */
-#fireworks-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
-  pointer-events: none; /* Ensures it doesn't block user interaction */
-}
