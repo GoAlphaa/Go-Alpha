@@ -145,7 +145,7 @@ const generateAPIResponse = async (incomingMessageDiv) => {
 // Show a loading animation while waiting for the API response
 const showLoadingAnimation = () => {
   const html = `<div class="message-content">
-                  <img class="avatar" src="GO_Alpha.png" alt="User avatar">
+                  <img class="avatar" src="chat_icon.png" alt="User avatar">
                   <p class="text"></p>
                   <div class="loading-indicator">
                      <p style='color:gray; text-weight:bold;'> Go-Alpha will generate your requested information now ...... </p>
