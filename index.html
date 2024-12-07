@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go-Alpha</title>
+  <link rel="icon" type="image/x-icon" href="Go_Alpha.png">
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/crypto-js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+  <!-- Include SheetJS library -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+  
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet" href="style.css">
+ 
+</head>
+<body>
+
+  <div id="loading-screen">
+    <div class="logo-spinner">
+      <img src="Go_Alpha.png" alt="Go-Alpha Logo" class="spinning-logo" />
+      
+    </div>
+ 
+  
+    <div class="spinner"></div>
+  
+  </div>
+
+  <canvas id="fireworks-canvas"></canvas>
+
+  <header class="header">
+    
+    <h1 class="title">Hello, I am  Go-Alpha</h1>
+    <p class="subtitle">New Genrative AI for Metaverse & AIS</p>
+ 
+ 
+    <ul class="suggestion-list">
+      <li class="suggestion">
+        <h4 class="text">What is Metaverse and how accountants can benefit from it? And how 
+          Metaverse can be used in Accounting Information Systems from data collection to generating accounting 
+          information?
+        </h4>
+        <span class="icon material-symbols-rounded">head_mounted_device</span>
+      </li>
+      <li class="suggestion">
+        <h4 class="text">What is spatial.io and how accountant can benefit from it within Metaverse?</h4>
+        <span class="icon material-symbols-rounded">help</span>
+      </li>
+      <li class="suggestion">
+        <h4 class="text">Can you  give me a sample financial reporting to be used within Spatial io in Metaverse with numbers,
+          and show me how to use such data in Metaverse?</h4>
+        <span class="icon material-symbols-rounded">request_quote</span>
+      </li>
+      <li class="suggestion">
+        <h4 class="text">Make a questionnaire to be distributed for the smaple that will attend in Metaverse accounting space.</h4>
+        <span class="icon material-symbols-rounded">diversity_3</span>
+      </li>
+   
+      
+    </ul>
+
+    <ul class="suggestion-list1">
+      <li class="suggestion">
+        <h4 class="text">What are tools that can be used to apply Metaverse in accounting with low cost and zero cost?</h4>
+        <span class="icon material-symbols-rounded">open_in_browser</span>
+      </li>
+      <li class="suggestion">
+        <h4 class="text">Make an imagination about company related to accounting field and tell me how can 
+          its accounting functions can be affected by using Metaverse.</h4>
+        <span class="icon material-symbols-rounded">edit</span>
+      </li>
+      <li class="suggestion">
+        <h4 class="text">Generate a random accounting data as input and show me how metaverse can process it to be useful information.</h4>
+        <span class="icon material-symbols-rounded">monitoring</span>
+      </li>
+      <li class="suggestion">
+        <h4 class="text">Recommedations for using Metaverse in accounting sectors and how to apply 
+          the Industry 5.0 in AIS stages (Input, Process, and Output).
+        </h4>
+        <span class="icon material-symbols-rounded">reviews</span>
+      </li>
+    </ul>
+  </header>
+ 
+  
+  <div class="chat-list"></div>
+ 
+  
+  <div class="typing-area">
+    <form action="#" class="typing-form">
+    <div class="btns">
+ 
+      
+      <div class="action-buttons" style="margin-left: 400px;">
+        <span id="saveChatPdf" class="icon material-symbols-rounded">download</span>
+        <span id="excel-sheet-button" class="icon material-symbols-rounded">description</span>      
+        <span id="delete-chat-button" class="icon material-symbols-rounded">delete</span>
+        <span id="theme-toggle-button" class="icon material-symbols-rounded">beach_access</span>
+        <span id="equalizer-chat-button" class="icon material-symbols-rounded">equalizer</span>
+        <span id="network-node-button" class="icon material-symbols-rounded">network_node</span> 
+        <span id="trending-up-button" class="icon material-symbols-rounded">trending_up</span> 
+ 
+      </div>
+        <form action="#" class="typing-form" id="f2">
+        <div class="input-wrapper">
+          <input type="text" placeholder="Request from Go-Alpha v.1" class="typing-input" required />
+          <button id="send-message-button" class="icon material-symbols-rounded">send</button>
+        </div>
+        </form>
+       <div>
+        
+       </div>
+       
+        
+      </div>
+      
+      
+    </form>
+
+   
+    <p class="disclaimer-text">
+       
+
+        <p class="disclaimer-text">
+          To visit my space within Metaverse just <a href="https://www.spatial.io/s/Accounting-Workspace-in-Metaverse-6731b8dd372ce33708e54371?share=8186900507849318543" id="click_here">click here.</a>  </p>
+    <footer class="disclaimer-text">
+      <p>&copy; 2024 All information are Rserved for <a id="hossam" href="https://linktr.ee/hossamelhendawy?fbclid=IwY2xjawGfKjBleHRuA2FlbQIxMAABHXQS2mvyDXL1XPBT8hKMOIXxPSYoYjVjRD2KEGFSFKtxNmjkPVdGTBi3xQ_aem_Sq3xxcu-gozLifx5oZuuRw"><b>Hossam EL Hendawy</b></a></p>
+    </footer>
+  </div>
+
+ 
+ 
+  <script src="script.js"></script>
+  
+</body>
+</html>

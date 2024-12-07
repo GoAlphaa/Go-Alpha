@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go-Alpha Blockchain Generator</title>
+  <link rel="icon" type="image/x-icon" href="Go_Alpha.png">
+  <!-- Google Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap');
+
+    body {
+      font-family: "Parkinsans", sans-serif;
+      font-optical-sizing: auto;
+      font-style: normal;
+      text-align: center;
+      margin: 0;
+      background: #FBF8EF;
+      color: #333;
+      padding: 20px;
+    }
+
+    .title {
+      color: #222;
+      font-weight: 500;
+      line-height: 1.2;
+      font-size: 3rem;
+      background: black;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 30px 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: #000000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .home-btn {
+      background-color: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: black;
+    }
+
+    #blockchain-container {
+      margin-top: 20px;
+      text-align: left;
+      padding: 0 20px;
+    }
+
+    .block {
+      margin: 10px 0;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background: #ffffff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .block strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .block p {
+      margin: 5px 0;
+      word-wrap: break-word;
+    }
+
+    .disclaimer-text {
+      color: #838383;
+      font-size: 0.9rem;
+      margin-top: 30px;
+    }
+
+    a {
+      text-decoration: none;
+      color: #5d5c5c;
+    }
+
+    a:hover {
+      color: red;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      .title {
+        font-size: 2rem;
+        line-height: 1.4;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      button {
+        font-size: 1rem;
+        padding: 10px 15px;
+      }
+
+      .block {
+        padding: 10px;
+      }
+
+      .disclaimer-text {
+        font-size: 0.8rem;
+      }
+
+      footer {
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 1.5rem;
+      }
+
+      button {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+      }
+
+      .block {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="title">Go-Alpha Blockchain Generator</h1>
+  
+  <div class="button-container">
+    <button class="home-btn" id="home-button">
+      <span class="material-icons" id="home-icon">home</span>
+    </button>
+    <button id="create-blockchain">Create Blockchain</button>
+  </div>
+  
+  <div id="blockchain-container"></div>
+
+  <button id="download-json" style="display: none;">Download Blockchain Data as JSON File</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    class Block {
+      constructor(index, timestamp, data, previousHash = "") {
+        this.index = index;
+        this.timestamp = timestamp;
+        this.data = data;
+        this.previousHash = previousHash;
+        this.hash = this.calculateHash();
+      }
+
+      calculateHash() {
+        return CryptoJS.SHA256(
+          this.index + this.timestamp + JSON.stringify(this.data) + this.previousHash
+        ).toString();
+      }
+    }
+
+    class Blockchain {
+      constructor() {
+        this.chain = [this.createGenesisBlock()];
+      }
+
+      createGenesisBlock() {
+        return new Block(0, new Date().toLocaleString(), "Genesis Block", "0");
+      }
+
+      getLatestBlock() {
+        return this.chain[this.chain.length - 1];
+      }
+
+      addBlock(newBlock) {
+        newBlock.previousHash = this.getLatestBlock().hash;
+        newBlock.hash = newBlock.calculateHash();
+        this.chain.push(newBlock);
+      }
+    }
+
+    const blockchain = new Blockchain();
+
+    document.getElementById("create-blockchain").addEventListener("click", () => {
+      Swal.fire({
+        title: 'Generate Blockchain Data',
+        text: 'This is a verified blockchain information generated for you for multiple usages. Please save this data for any future usages.',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Generate Data',
+        cancelButtonText: 'Cancel',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          generateBlockchainData();
+        }
+      });
+    });
+
+    function generateBlockchainData() {
+      const timestamp = new Date().toLocaleString();
+      const newBlockData = {
+        sender: "User",
+        receiver: "Receiver",
+        amount: Math.floor(Math.random() * 100) + 1,
+      };
+
+      const newBlock = new Block(
+        blockchain.chain.length,
+        timestamp,
+        newBlockData,
+        blockchain.getLatestBlock().hash
+      );
+      blockchain.addBlock(newBlock);
+
+      displayBlockchain();
+      document.getElementById("download-json").style.display = "inline-block";
+    }
+
+    function displayBlockchain() {
+      const container = document.getElementById("blockchain-container");
+      container.innerHTML = "";
+
+      blockchain.chain.forEach((block, index) => {
+        const blockDiv = document.createElement("div");
+        blockDiv.className = "block";
+        blockDiv.innerHTML = `
+          <strong>Block #${index}</strong>
+          <p><strong>Timestamp:</strong> ${block.timestamp}</p>
+          <p><strong>Data:</strong> ${JSON.stringify(block.data)}</p>
+          <p><strong>Hash:</strong> ${block.hash}</p>
+          <p><strong>Previous Hash:</strong> ${block.previousHash}</p>
+        `;
+        container.appendChild(blockDiv);
+      });
+    }
+
+    document.getElementById("download-json").addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(blockchain.chain)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Go-Alpha blockchain_data.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("home-button").addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+  </script>
+
+  <p class="disclaimer-text">
+    To visit my space within Metaverse just <a href="https://www.spatial.io/s/Accounting-Workspace-in-Metaverse-6731b8dd372ce33708e54371?share=8186900507849318543" id="click_here">click here.</a>
+  </p>
+  <footer>
+    <p>&copy; 2024 All information are Reserved for <a id="hossam" href="https://linktr.ee/hossamelhendawy"><b>Hossam EL Hendawy</b></a></p>
+  </footer>
+
+</body>
+</html>
