@@ -10,7 +10,7 @@ let userMessage = null;
 let isResponseGenerating = false;
 
 // API configuration
-const API_KEY = "AIzaSyAZpYGBRW0qna4TxRrZ8CkIEkG89AM2kKc"; // Your API key here
+const API_KEY = "AIzaSyD02N2BsldvKriY0_bIntrzkR50GxOxv8g"; // Your API key here
 const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`;
 
  
