@@ -9,8 +9,8 @@ const deleteChatButton = document.querySelector("#delete-chat-button");
 let userMessage = null;
 let isResponseGenerating = false;
 
-// API configuration
-const API_KEY = "AIzaSyD16AnDg4GDJWC5Olpxli2E7Dvy0o3U6ZY"; // Your API key here
+
+const API_KEY = "AIzaSyAcOLAm8Nh6h63GFMi9Kv8e9QaPcjqOWOU"; 
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
  
@@ -18,18 +18,18 @@ const loadDataFromLocalstorage = () => {
   const savedChats = localStorage.getItem("saved-chats");
   const isLightMode = (localStorage.getItem("themeColor") === "light_mode");
 
-  // Apply the stored theme
+  
   document.body.classList.toggle("light_mode", isLightMode);
   toggleThemeButton.innerText = isLightMode ? "dark_mode" : "light_mode";
 
-  // Restore saved chats or clear the chat container
+   
   chatContainer.innerHTML = savedChats || '';
   document.body.classList.toggle("hide-header", savedChats);
 
-  chatContainer.scrollTo(0, chatContainer.scrollHeight); // Scroll to the bottom
+  chatContainer.scrollTo(0, chatContainer.scrollHeight);  
 }
 
-// Create a new message element and return it
+ 
 const createMessageElement = (content, ...classes) => {
   const div = document.createElement("div");
   div.classList.add("message", ...classes);
@@ -37,7 +37,7 @@ const createMessageElement = (content, ...classes) => {
   return div;
 }
 
-// Show typing effect by displaying words one by one
+ 
 const showTypingEffect = (text, textElement, incomingMessageDiv) => {
   const words = text.split(' ');
   let currentWordIndex = 0;
@@ -64,11 +64,11 @@ const showTypingEffect = (text, textElement, incomingMessageDiv) => {
  // ================================================================================== //
 
 
-// Updated API response handler
+ 
 const generateAPIResponse = async (incomingMessageDiv) => {
-  const textElement = incomingMessageDiv.querySelector(".text"); // Getting text element
+  const textElement = incomingMessageDiv.querySelector(".text");  
   
-  // Define variations of name-related questions
+   
   const nameQuestions = [
     "what is your name",
     "who are you",
@@ -87,25 +87,24 @@ const generateAPIResponse = async (incomingMessageDiv) => {
     "do you know your name"
   ];
 
-  // Normalize and check if the user message matches any of the name-related questions
   const normalizedMessage = userMessage.toLowerCase().trim();
   const isNameQuestion = nameQuestions.some(question => normalizedMessage.includes(question));
 
   if (isNameQuestion) {
-    // Respond with the chatbot's name
+    
     setTimeout(() => {
-      textElement.innerText = "I am Go-Alpha."; // The chatbot's response
+      textElement.innerText = "I am Go-Alpha.";  
       incomingMessageDiv.classList.remove("loading");
       incomingMessageDiv.querySelector(".icon").classList.remove("hide");
       isResponseGenerating = false;
-      localStorage.setItem("saved-chats", chatContainer.innerHTML); // Save the chat
+      localStorage.setItem("saved-chats", chatContainer.innerHTML);  
       chatContainer.scrollTo(0, chatContainer.scrollHeight);
-    }, 1000); // Simulating a delay for a more natural feel
-    return; // Exit early since we handled the response
+    }, 1000);  
+    return;  
   }
 
   try {
-    // Send a POST request to the API with the user's message
+    
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -120,10 +119,10 @@ const generateAPIResponse = async (incomingMessageDiv) => {
     const data = await response.json();
     if (!response.ok) throw new Error(data.error.message);
 
-    // Get the API response text and remove asterisks from it
+     
     const apiResponse = data?.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, '$1');
-    showTypingEffect(apiResponse, textElement, incomingMessageDiv); // Show typing effect
-  } catch (error) { // Handle error
+    showTypingEffect(apiResponse, textElement, incomingMessageDiv);  
+  } catch (error) {  
     isResponseGenerating = false;
     textElement.innerText = error.message;
     textElement.parentElement.closest(".message").classList.add("error");
@@ -133,16 +132,7 @@ const generateAPIResponse = async (incomingMessageDiv) => {
 };
 
 
-
-// ============ home =============
-
  
-
-
-
-
-
-// Show a loading animation while waiting for the API response
 const showLoadingAnimation = () => {
   const html = `<div class="message-content">
                   <img class="avatar" src="chat_icon.png" alt="User avatar">
@@ -156,36 +146,36 @@ const showLoadingAnimation = () => {
   const incomingMessageDiv = createMessageElement(html, "incoming", "loading");
   chatContainer.appendChild(incomingMessageDiv);
 
-  chatContainer.scrollTo(0, chatContainer.scrollHeight); // Scroll to the bottom
+  chatContainer.scrollTo(0, chatContainer.scrollHeight);  
   generateAPIResponse(incomingMessageDiv);
 }
 
-// Copy message text to the clipboard
+ 
 const copyMessage = (copyButton) => {
   const messageText = copyButton.parentElement.querySelector(".text").innerText;
 
   navigator.clipboard.writeText(messageText);
-  copyButton.innerText = "done"; // Show confirmation icon
-  setTimeout(() => copyButton.innerText = "content_copy", 1000); // Revert icon after 1 second
+  copyButton.innerText = "done";  
+  setTimeout(() => copyButton.innerText = "content_copy", 1000);  
 }
 
-// Handle sending outgoing chat messages
+ 
 const handleOutgoingChat = () => {
   userMessage = typingForm.querySelector(".typing-input").value.trim() || userMessage;
   
-  // Check if the message contains non-English characters (Arabic, etc.)
-  const englishPattern = /^[A-Za-z0-9\s.,?!]+$/; // Matches only English characters, numbers, and punctuation
-  if (!englishPattern.test(userMessage)) {
+ 
+  const multiLanguagePattern = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFFa-zA-Z0-9\s.,?!]+$/; // Allows Arabic and English characters
+  if (!multiLanguagePattern.test(userMessage)) {
     Swal.fire({
       title: "Language Error",
-      text: "Go-Alpha v.1 does not support arabic language. Please enter your message in English.",
+      text: "Go-Alpha v.1 supports only Arabic and English languages. Please enter your message in one of these languages.",
       icon: "error",
       confirmButtonText: "Close",
     });
-    return; // Stop if the message is not English
+    return; 
   }
 
-  if(!userMessage || isResponseGenerating) return; // Exit if there is no message or response is generating
+  if(!userMessage || isResponseGenerating) return;  
 
   isResponseGenerating = true;
 
@@ -198,27 +188,21 @@ const handleOutgoingChat = () => {
   outgoingMessageDiv.querySelector(".text").innerText = userMessage;
   chatContainer.appendChild(outgoingMessageDiv);
   
-  typingForm.reset(); // Clear input field
+  typingForm.reset();  
   document.body.classList.add("hide-header");
-  chatContainer.scrollTo(0, chatContainer.scrollHeight); // Scroll to the bottom
-  setTimeout(showLoadingAnimation, 500); // Show loading animation after a delay
-
-  
+  chatContainer.scrollTo(0, chatContainer.scrollHeight);  
+  setTimeout(showLoadingAnimation, 500);  
 }
 
-// Toggle between light and dark themes
+ 
 toggleThemeButton.addEventListener("click", () => {
   const isLightMode = document.body.classList.toggle("light_mode");
   localStorage.setItem("themeColor", isLightMode ? "light_mode" : "dark_mode");
   toggleThemeButton.innerText = isLightMode ? "dark_mode" : "light_mode";
 });
 
-// Delete all chats from local storage when button is clicked
+
 deleteChatButton.addEventListener("click", () => {
-  // if (confirm("Are you sure you want to delete all the chats?")) {
-  //   localStorage.removeItem("saved-chats");
-  //   loadDataFromLocalstorage();
-  // }
 
   Swal.fire({
     title: "Are you sure?",
@@ -266,65 +250,59 @@ loadDataFromLocalstorage();
 
 /*============================== Download PDF =====================================*/
 
- 
-
-
-
- 
 document.getElementById("saveChatPdf").addEventListener("click", function () {
-  const { jsPDF } = window.jspdf; // مكتبة jsPDF
+  const { jsPDF } = window.jspdf;  
   const doc = new jsPDF({
-      orientation: "portrait", // اتجاه الصفحة
-      unit: "mm", // وحدة القياس
-      format: "a4" // حجم الصفحة
+      orientation: "portrait",  
+      unit: "mm",  
+      format: "a4"  
   });
 
-  // إعدادات الخط والهوامش
-  const margin = 20; // الهوامش
-  const lineHeight = 10; // ارتفاع السطر
-  const pageHeight = doc.internal.pageSize.height; // ارتفاع الصفحة
-  const pageWidth = doc.internal.pageSize.width; // عرض الصفحة
-  let y = margin; // الموضع الرأسي يبدأ من الهامش
+   
+  const margin = 20;  
+  const lineHeight = 10;  
+  const pageHeight = doc.internal.pageSize.height;  
+  const pageWidth = doc.internal.pageSize.width;  
+  let y = margin;  
 
-  // دالة لإضافة العلامة المائية
+   
   const addWatermark = () => {
-      doc.setFontSize(15); // حجم خط العلامة المائية
-      doc.setTextColor(200, 200, 200); // لون باهت
+      doc.setFontSize(15);  
+      doc.setTextColor(200, 200, 200);  
       doc.text("This is a generated information paper by Go-Alpha", pageWidth / 2, pageHeight / 30, {
           align: "center",
-          angle: 0 // زاوية الميل
+          angle: 0  
       });
   };
 
-  // إضافة العلامة المائية للصفحة الأولى
+   
   addWatermark();
 
-  // جمع النصوص من محتوى الدردشة
+   
   const messages = document.querySelectorAll(".chat-list .message .text");
 
   messages.forEach((message) => {
       const text = message.innerText;
-      const splitText = doc.splitTextToSize(text, pageWidth - 2 * margin); // تقسيم النص ليتناسب مع العرض
-
+      const splitText = doc.splitTextToSize(text, pageWidth - 2 * margin);  
       splitText.forEach((line, index) => {
-          // إذا امتلأت الصفحة، أضف صفحة جديدة
+          
           if (y + lineHeight > pageHeight - margin) {
-              doc.addPage(); // إضافة صفحة جديدة
-              addWatermark(); // إضافة العلامة المائية للصفحة الجديدة
-              y = margin; // إعادة الموضع الرأسي
+              doc.addPage();  
+              addWatermark(); 
+              y = margin; 
           }
 
         
-              doc.setFontSize(14); // حجم الخط لبقية النصوص
-              doc.setTextColor(0, 0, 0); // اللون الأسود
+              doc.setFontSize(14);  
+              doc.setTextColor(0, 0, 0);  
           
 
-          doc.text(line, margin, y); // إضافة النص للصفحة
-          y += lineHeight; // تحريك الموضع للأسفل
+          doc.text(line, margin, y);  
+          y += lineHeight;  
       });
   });
 
-  doc.save("Go-Alpha.pdf"); // حفظ الملف باسم chat.pdf
+  doc.save("Go-Alpha.pdf");  
 });
 
 
@@ -333,7 +311,7 @@ document.getElementById("saveChatPdf").addEventListener("click", function () {
 //================= generate a chart =========================//
 
 
-// Equalizer button event listener
+ 
 const equalizerChatButton = document.getElementById("equalizer-chat-button");
 
 equalizerChatButton.addEventListener("click", () => {
@@ -348,13 +326,12 @@ equalizerChatButton.addEventListener("click", () => {
     return;
   }
 
-  // Extract text from the latest API response (last incoming message)
+ 
   const latestMessage = messages[messages.length - 1].innerText;
-
-  // Process text to extract key-value pairs (mock data parsing logic)
+ 
   const chartData = extractDataFromMessage(latestMessage);
 
-  // If no valid data found, show an error
+  
   if (!chartData) {
     Swal.fire({
       icon: "error",
@@ -364,13 +341,13 @@ equalizerChatButton.addEventListener("click", () => {
     return;
   }
 
-  // Display chart in a popup
+   
   showChartPopup(chartData);
 });
 
-// Function to extract key-value pairs from message text
+ 
 function extractDataFromMessage(message) {
-  const dataRegex = /(\w+):\s*\$?([\d.]+)/g; // Match "Key: Value" format
+  const dataRegex = /(\w+):\s*\$?([\d.]+)/g;  
   const labels = [];
   const values = [];
   let match;
@@ -380,13 +357,13 @@ function extractDataFromMessage(message) {
     values.push(parseFloat(match[2]));
   }
 
-  // Return null if no valid data found
+   
   if (labels.length === 0 || values.length === 0) return null;
 
   return { labels, values };
 }
 
-// Function to display chart in a popup and provide download option
+ 
 function showChartPopup({ labels, values }) {
   Swal.fire({
     title: "Go-Alpha Generated Chart",
@@ -402,7 +379,7 @@ function showChartPopup({ labels, values }) {
     didOpen: () => {
       const ctx = document.getElementById("chartCanvas").getContext("2d");
 
-      // Generate chart
+       
       const chart = new Chart(ctx, {
         type: "bar",
         data: {
@@ -440,7 +417,7 @@ function showChartPopup({ labels, values }) {
         },
       });
 
-      // Attach event listener to the download button
+      
       document.getElementById("downloadChartPdf").addEventListener("click", () => {
         downloadChartAsPdf(chart);
       });
@@ -448,27 +425,27 @@ function showChartPopup({ labels, values }) {
   });
 }
 
-// Function to download the chart as a PDF
+ 
 function downloadChartAsPdf(chart) {
   const { jsPDF } = window.jspdf;
 
-  // Create a jsPDF instance
+   
   const pdf = new jsPDF({
     orientation: "portrait",
     unit: "mm",
     format: "a4",
   });
 
-  // Use html2canvas to capture the chart
+  
   html2canvas(chart.canvas).then((canvas) => {
-    const imgData = canvas.toDataURL("image/png"); // Get chart as image
+    const imgData = canvas.toDataURL("image/png");  
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = pageWidth - 20; // Leave margins
-    const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+    const imgWidth = pageWidth - 20; 
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;  
 
-    pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight); // Add image to PDF
-    pdf.save("Go-Alpha chart.pdf"); // Save the PDF
+    pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);  
+    pdf.save("Go-Alpha chart.pdf");  
   });
 }
 
@@ -478,12 +455,12 @@ function downloadChartAsPdf(chart) {
 
 // =============================== excel format ============================= //
 
-// Add an event listener to the "trending_up" button
+ 
 document.getElementById("excel-sheet-button").addEventListener("click", async () => {
   const apiResponse = await fetchDataFromGeminiAPI();
 
   if (apiResponse) {
-    const parsedData = formatResponseData(apiResponse); // Process the data for Excel download
+    const parsedData = formatResponseData(apiResponse);  
 
     if (parsedData.length > 0) {
       Swal.fire({
@@ -522,7 +499,7 @@ document.getElementById("excel-sheet-button").addEventListener("click", async ()
   }
 });
 
-// Function to fetch data from Gemini API
+ 
 const fetchDataFromGeminiAPI = async () => {
   try {
     const response = await fetch(API_URL, {
@@ -541,7 +518,7 @@ const fetchDataFromGeminiAPI = async () => {
     const data = await response.json();
     if (!response.ok) throw new Error(data.error.message);
 
-    // Assuming the response is in the form of text content
+     
     return data.candidates[0]?.content?.parts[0]?.text || null;
   } catch (error) {
     console.error("Error fetching data from Gemini API:", error);
@@ -549,9 +526,9 @@ const fetchDataFromGeminiAPI = async () => {
   }
 };
 
-// Function to format the API response into an Excel-friendly format
+ 
 const formatResponseData = (responseText) => {
-  // Split the response into individual lines
+  
   const formattedData = [];
   const lines = responseText.split("\n");
 
@@ -561,10 +538,10 @@ const formatResponseData = (responseText) => {
     }
   });
 
-  return formattedData; // Return the formatted data for Excel download
+  return formattedData;  
 };
 
-// Function to download data in Excel format
+ 
 const downloadExcel = (data) => {
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
@@ -591,14 +568,15 @@ document.getElementById("network-node-button").addEventListener("click", () => {
     cancelButtonText: 'No, cancel',
   }).then((result) => {
     if (result.isConfirmed) {
-      // Redirect to blockchain.html
+       
       window.location.href = "blockchain.html";
+
     }
   });
 });
 
 
-// ========= Stock price information and its prediction ================================== //
+// ========= Stock price information and its prediction ========================== //
 
 document.getElementById("trending-up-button").addEventListener("click", () => {
   Swal.fire({
@@ -643,7 +621,7 @@ document.getElementById("trending-up-button").addEventListener("click", () => {
       </button>
     `,
     didRender: () => {
-      // Attach event listener to the Predict button
+       
       document.getElementById("predict-stock-price").addEventListener("click", () => {
         const selectedCompany = document.getElementById("company-select").value;
         if (!selectedCompany) {
@@ -672,9 +650,9 @@ document.getElementById("trending-up-button").addEventListener("click", () => {
   });
 });
 
-// Fetch stock information (same as before)
+ 
 const fetchStockInfo = async (companySymbol) => {
-  const API_KEY = "eba8ed1e8c12be65a99a99cad6b03b94"; // Replace with your Marketstack API key
+  const API_KEY = "eba8ed1e8c12be65a99a99cad6b03b94";  
   const API_URL = `https://api.marketstack.com/v1/eod?access_key=${API_KEY}&symbols=${companySymbol}`;
 
   try {
@@ -682,7 +660,7 @@ const fetchStockInfo = async (companySymbol) => {
     const data = await response.json();
 
     if (data && data.data && data.data.length > 0) {
-      const stockData = data.data[0]; // Use the most recent stock data
+      const stockData = data.data[0];  
 
       Swal.fire({
         title: `${companySymbol} Stock Information`,
@@ -713,11 +691,11 @@ const fetchStockInfo = async (companySymbol) => {
   }
 };
 
-// Predict stock price (same as before)
+ 
 const predictStockPrice = async (companySymbol) => {
   try {
-    const randomPercentageChange = (Math.random() - 0.5) * 0.1; // Random percentage change (-5% to +5%)
-    const API_KEY = "eba8ed1e8c12be65a99a99cad6b03b94"; // Replace with your Marketstack API key
+    const randomPercentageChange = (Math.random() - 0.5) * 0.1;  
+    const API_KEY = "eba8ed1e8c12be65a99a99cad6b03b94";  
     const API_URL = `https://api.marketstack.com/v1/eod?access_key=${API_KEY}&symbols=${companySymbol}`;
 
     const response = await fetch(API_URL);
@@ -754,17 +732,13 @@ const predictStockPrice = async (companySymbol) => {
 };
 
 
-
-
-// ssssss
-
 document.addEventListener("DOMContentLoaded", () => {
   const loadingScreen = document.getElementById("loading-screen");
   
-  // Simulate loading delay (adjust time as needed)
+   
   setTimeout(() => {
     loadingScreen.style.display = "none";
-  }, 2000); // 2 seconds
+  }, 2000);  
 });
 
 
