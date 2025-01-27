@@ -1,5 +1,5 @@
- 
- @import url('https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -9,8 +9,6 @@
   font-style: normal;
   
 }
-
- 
 
 :root {
  
@@ -213,10 +211,6 @@ body.hide-header .header {
   align-self: flex-start;
 }
 
-/* .chat-list .message.loading .avatar {
-   
-} */
-
 @keyframes rotate {
   100% {
     transform: rotate(360deg);
@@ -292,8 +286,6 @@ body.hide-header .header {
   padding: 1rem;
   background: var(--primary-color);
  
-  
-  
 }
 
  
@@ -442,8 +434,6 @@ body.hide-header .header {
 }
  
 
- 
-
 @media only screen and (min-width: 200px) {
  
 
@@ -455,9 +445,6 @@ body.hide-header .header {
     
   }
 
-  #saveChatPdf{
-     
-  }
 
   .input-wrapper{
     margin-top: 30px;
@@ -485,16 +472,15 @@ body.hide-header .header {
   
 }
  
-
 @media (max-width: 480px) {
-  /* Adjust icon size and spacing for small devices like iPhone SE */
+   
   .action-buttons {
     gap: 10px;
   }
 
   .action-buttons .icon {
-    font-size: 18px; /* Reduce icon size */
-    padding: 2px; /* Adjust padding */
+    font-size: 18px;  
+    padding: 2px;  
   }
 
   .typing-area .icon {
@@ -521,16 +507,12 @@ body.hide-header .header {
 }
 }
 
-
-/* uuuuu */
-
-
 .spinning-logo{
    
   margin-right: 80px;
 }
  
-/* Loading Screen */
+ 
 #loading-screen {
   position: fixed;
   top: 0;
@@ -545,7 +527,7 @@ body.hide-header .header {
   z-index: 1000;
 }
 
-/* Lottie Animation Container */
+ 
 #lottie-animation {
   width: 150px;
   height: 150px;
@@ -557,12 +539,7 @@ body.hide-header .header {
   font-family: Arial, sans-serif;
   font-size: 18px;
 }
- 
-
- 
-
-
- /* Loading Screen */
+  
 #loading-screen {
   position: fixed;
   top: 0;
@@ -577,7 +554,7 @@ body.hide-header .header {
   z-index: 1000;
 }
 
-/* Spinner Animation */
+ 
 .spinner {
   width: 60px;
   height: 60px;
