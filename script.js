@@ -621,7 +621,6 @@ document.getElementById("trending-up-button").addEventListener("click", () => {
       </button>
     `,
     didRender: () => {
-       
       document.getElementById("predict-stock-price").addEventListener("click", () => {
         const selectedCompany = document.getElementById("company-select").value;
         if (!selectedCompany) {
@@ -650,26 +649,25 @@ document.getElementById("trending-up-button").addEventListener("click", () => {
   });
 });
 
- 
 const fetchStockInfo = async (companySymbol) => {
-  const API_KEY = "eba8ed1e8c12be65a99a99cad6b03b94";  
-  const API_URL = `https://api.marketstack.com/v1/eod?access_key=${API_KEY}&symbols=${companySymbol}`;
+  const API_KEY = "Rea3Kjnwleof1FTWhRAsMEOoo2QS2Sy2"; 
+  const API_URL = `https://financialmodelingprep.com/api/v3/quote/${companySymbol}?apikey=${API_KEY}`;
 
   try {
     const response = await fetch(API_URL);
     const data = await response.json();
 
-    if (data && data.data && data.data.length > 0) {
-      const stockData = data.data[0];  
+    if (data && data.length > 0) {
+      const stockData = data[0];  
 
       Swal.fire({
         title: `${companySymbol} Stock Information`,
         html: `
-          <p><strong>Date:</strong> ${stockData.date}</p>
+          <p><strong>Date:</strong> ${new Date(stockData.timestamp * 1000).toLocaleDateString()}</p>
           <p><strong>Open:</strong> $${stockData.open.toFixed(2)}</p>
-          <p><strong>Close:</strong> $${stockData.close.toFixed(2)}</p>
-          <p><strong>High:</strong> $${stockData.high.toFixed(2)}</p>
-          <p><strong>Low:</strong> $${stockData.low.toFixed(2)}</p>
+          <p><strong>Close:</strong> $${stockData.price.toFixed(2)}</p>
+          <p><strong>High:</strong> $${stockData.dayHigh.toFixed(2)}</p>
+          <p><strong>Low:</strong> $${stockData.dayLow.toFixed(2)}</p>
           <p><strong>Volume:</strong> ${stockData.volume.toLocaleString()}</p>
         `,
         icon: "info",
@@ -691,24 +689,23 @@ const fetchStockInfo = async (companySymbol) => {
   }
 };
 
- 
 const predictStockPrice = async (companySymbol) => {
+  const API_KEY = "Rea3Kjnwleof1FTWhRAsMEOoo2QS2Sy2";  
+  const API_URL = `https://financialmodelingprep.com/api/v3/quote/${companySymbol}?apikey=${API_KEY}`;
+
   try {
     const randomPercentageChange = (Math.random() - 0.5) * 0.1;  
-    const API_KEY = "eba8ed1e8c12be65a99a99cad6b03b94";  
-    const API_URL = `https://api.marketstack.com/v1/eod?access_key=${API_KEY}&symbols=${companySymbol}`;
-
     const response = await fetch(API_URL);
     const data = await response.json();
 
-    if (data && data.data && data.data.length > 0) {
-      const stockData = data.data[0];
-      const predictedPrice = stockData.close * (1 + randomPercentageChange);
+    if (data && data.length > 0) {
+      const stockData = data[0];  
+      const predictedPrice = stockData.price * (1 + randomPercentageChange);  
 
       Swal.fire({
         title: `Predicted Price for ${companySymbol}`,
         html: `
-          <p><strong>Current Close Price:</strong> $${stockData.close.toFixed(2)}</p>
+          <p><strong>Current Close Price:</strong> $${stockData.price.toFixed(2)}</p>
           <p><strong>Predicted Close Price:</strong> $${predictedPrice.toFixed(2)}</p>
           <p><em>(Prediction is for informational purposes only)</em></p>
         `,
