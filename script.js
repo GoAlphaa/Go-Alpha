@@ -10,8 +10,8 @@ let userMessage = null;
 let isResponseGenerating = false;
 
 
-const API_KEY = "AIzaSyCjQdmO3pHKlbNoUNhCpWCU_fsnCIPl_FE"; 
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+const API_KEY = "AIzaSyCXD_dTgriN4anDN1nEw_7XapK8-zyToY0"; 
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
 
  
 const loadDataFromLocalstorage = () => {
