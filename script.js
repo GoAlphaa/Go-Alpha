@@ -649,29 +649,25 @@ document.getElementById("trending-up-button").addEventListener("click", () => {
   });
 });
 
-// ---------------- Marketstack API ---------------- //
+// ---------------- Finnhub API ---------------- //
 
-// Get stock info (EOD data)
+// Get stock info (real-time quote)
 const fetchStockInfo = async (companySymbol) => {
-  const API_KEY = "4b2f2d1698504ee545d9d26e158d7d57";
-  const API_URL = `http://api.marketstack.com/v1/eod?access_key=${API_KEY}&symbols=${companySymbol}`;
+  const API_URL = `https://finnhub.io/api/v1/quote?symbol=${companySymbol}&token=d2tceqpr01qkuv3k9s8gd2tceqpr01qkuv3k9s90`;
 
   try {
     const response = await fetch(API_URL);
     const data = await response.json();
 
-    if (data && data.data && data.data.length > 0) {
-      const stockData = data.data[0];  
-
+    if (data && data.c) {
       Swal.fire({
         title: `${companySymbol} Stock Information`,
         html: `
-          <p><strong>Date:</strong> ${stockData.date}</p>
-          <p><strong>Open:</strong> $${stockData.open.toFixed(2)}</p>
-          <p><strong>Close:</strong> $${stockData.close.toFixed(2)}</p>
-          <p><strong>High:</strong> $${stockData.high.toFixed(2)}</p>
-          <p><strong>Low:</strong> $${stockData.low.toFixed(2)}</p>
-          <p><strong>Volume:</strong> ${stockData.volume.toLocaleString()}</p>
+          <p><strong>Current Price:</strong> $${data.c.toFixed(2)}</p>
+          <p><strong>Open:</strong> $${data.o.toFixed(2)}</p>
+          <p><strong>High:</strong> $${data.h.toFixed(2)}</p>
+          <p><strong>Low:</strong> $${data.l.toFixed(2)}</p>
+          <p><strong>Previous Close:</strong> $${data.pc.toFixed(2)}</p>
         `,
         icon: "info",
       });
@@ -692,24 +688,22 @@ const fetchStockInfo = async (companySymbol) => {
   }
 };
 
-// Predict stock price (based on latest close price)
+// Predict stock price (simple random model based on current price)
 const predictStockPrice = async (companySymbol) => {
-  const API_KEY = "e113d5294b8933bb886167a5f112fa91";
-  const API_URL = `http://api.marketstack.com/v1/eod?access_key=${API_KEY}&symbols=${companySymbol}`;
+  const API_URL = `https://finnhub.io/api/v1/quote?symbol=${companySymbol}&token=d2tceqpr01qkuv3k9s8gd2tceqpr01qkuv3k9s90`;
 
   try {
-    const randomPercentageChange = (Math.random() - 0.5) * 0.1;  
     const response = await fetch(API_URL);
     const data = await response.json();
 
-    if (data && data.data && data.data.length > 0) {
-      const stockData = data.data[0];  
-      const predictedPrice = stockData.close * (1 + randomPercentageChange);  
+    if (data && data.c) {
+      const randomPercentageChange = (Math.random() - 0.5) * 0.1;  
+      const predictedPrice = data.c * (1 + randomPercentageChange);  
 
       Swal.fire({
         title: `Predicted Price for ${companySymbol}`,
         html: `
-          <p><strong>Current Close Price:</strong> $${stockData.close.toFixed(2)}</p>
+          <p><strong>Current Price:</strong> $${data.c.toFixed(2)}</p>
           <p><strong>Predicted Close Price:</strong> $${predictedPrice.toFixed(2)}</p>
           <p><em>(Prediction is for informational purposes only)</em></p>
         `,
