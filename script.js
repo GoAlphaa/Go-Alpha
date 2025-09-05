@@ -694,7 +694,7 @@ const fetchStockInfo = async (companySymbol) => {
 
 // Predict stock price (based on latest close price)
 const predictStockPrice = async (companySymbol) => {
-  const API_KEY = "4b2f2d1698504ee545d9d26e158d7d57";
+  const API_KEY = "e113d5294b8933bb886167a5f112fa91";
   const API_URL = `http://api.marketstack.com/v1/eod?access_key=${API_KEY}&symbols=${companySymbol}`;
 
   try {
